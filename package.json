@@ -1,0 +1,10 @@
+{
+  "name": "common-function",
+  "private": true,
+  "scripts": {
+    "commit": "npx git-cz"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
