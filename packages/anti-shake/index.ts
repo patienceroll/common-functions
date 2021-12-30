@@ -1,6 +1,6 @@
 export default function useAntiShake<
-  Params extends unknown[],
-  ReturnType = unknown
+	Params extends unknown[],
+	ReturnType = unknown
 >(
 	method: (...params: Params) => Promise<ReturnType>,
 	options = { delay: 300 }
