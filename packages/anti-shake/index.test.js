@@ -1,4 +1,3 @@
-import useAntiShake from './index'
+import useAntiShake from "./index";
 
-
-const test = useAntiShake()
+const test = useAntiShake();
