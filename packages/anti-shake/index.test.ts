@@ -33,7 +33,6 @@ const testAntiShake = (tobe: number, delay: number, antiShakeDelay = 300) => {
 /** 模拟输入间隔为 100ms,没超过防抖间隔300ms,需要防抖 */
 test('anti-shake.js', () => testAntiShake(10, 100));
 
-
 /** 模拟输入间隔为 300ms,刚好等于防抖间隔300ms,不需要防抖 */
 test('anti-shake.js', () => testAntiShake(55, 300));
 
