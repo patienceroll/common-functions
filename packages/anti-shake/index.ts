@@ -1,3 +1,9 @@
+/**
+ * ## 防抖
+ * 返回一个与传入函数相同且防抖的函数。
+ * 1. 传入的函数必须是 promise。
+ * 2. 默认防抖间隔是300ms
+ */
 export default function useAntiShake<
 	Params extends unknown[],
 	ReturnType = unknown
@@ -5,7 +11,7 @@ export default function useAntiShake<
 	method: (...params: Params) => Promise<ReturnType>,
 	options = { delay: 300 }
 ) {
-	let Timer = NaN;
+	let Timer: NodeJS.Timeout;
 	let count = 0;
 	return (...arg: Params) =>
 		new Promise<ReturnType>((resolve, reject) => {
