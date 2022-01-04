@@ -1,0 +1,11 @@
+15 error Error: Command failed with exit code 1: git remote update
+15 error fatal: unable to access 'https://github.com/patienceroll/common-functions.git/': schannel: failed to receive handshake, SSL/TLS connection failed
+15 error error: Could not fetch origin
+15 error Fetching origin
+15 error     at makeError (F:\custom\common-functions\node_modules\execa\lib\error.js:60:11)
+15 error     at Function.module.exports.sync (F:\custom\common-functions\node_modules\execa\index.js:194:17)
+15 error     at Object.execSync (F:\custom\common-functions\node_modules\@lerna\child-process\index.js:39:16)
+15 error     at updateRemote (F:\custom\common-functions\node_modules\@lerna\version\lib\is-behind-upstream.js:34:16)
+15 error     at isBehindUpstream (F:\custom\common-functions\node_modules\@lerna\version\lib\is-behind-upstream.js:16:3)
+15 error     at VersionCommand.initialize (F:\custom\common-functions\node_modules\@lerna\version\index.js:153:9)
+15 error     at F:\custom\common-functions\node_modules\@lerna\command\index.js:274:24
