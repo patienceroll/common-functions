@@ -31,19 +31,19 @@ const testAntiShake = (tobe: number, delay: number, antiShakeDelay = 300) => {
 };
 
 /** 模拟输入间隔为 100ms,没超过防抖间隔300ms,需要防抖 */
-test('anti-shake.js', () => testAntiShake(10, 100));
+test('anti-shake', () => testAntiShake(10, 100));
 
 /** 模拟输入间隔为 300ms,刚好等于防抖间隔300ms,不需要防抖 */
-test('anti-shake.js', () => testAntiShake(55, 300));
+test('anti-shake', () => testAntiShake(55, 300));
 
 /** 模拟输入间隔为 299ms,刚好小于防抖间隔300ms,需要防抖 */
-test('anti-shake.js', () => testAntiShake(10, 299));
+test('anti-shake', () => testAntiShake(10, 299));
 
 /** 模拟输入间隔为 301ms,刚好大于防抖间隔300ms,不需要防抖 */
-test('anti-shake.js', () => testAntiShake(55, 301));
+test('anti-shake', () => testAntiShake(55, 301));
 
 /** 模拟输入间隔为 350ms,小于防抖间隔400ms,需要防抖 */
-test('anti-shake.js', () => testAntiShake(10, 350, 400));
+test('anti-shake', () => testAntiShake(10, 350, 400));
 
 /** 模拟输入间隔为 200ms,小于于防抖间隔199ms,不需要防抖 */
-test('anti-shake.js', () => testAntiShake(55, 200, 199));
+test('anti-shake', () => testAntiShake(55, 200, 199));
