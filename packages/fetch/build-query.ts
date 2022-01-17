@@ -8,6 +8,14 @@
 // 		.replace(/%5D/gi, ']');
 // }
 
+/**
+ * ### 构建url的query参数
+ * 1. date 对象会转为 .toISOString()
+ * 2. 数组会转为 array[]=value1 & array[]=value2 的格式
+ * 3. 对象会转为 JSON 字符串
+ * 4. null 或 undefined 不传值
+ * 5. 其余值类型不做处理
+ */
 export default function buildQuery(
 	params: URLSearchParams | Record<string | number, unknown>
 ) {
