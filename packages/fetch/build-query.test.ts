@@ -23,3 +23,5 @@ testBuildQuery({ object: { a: 'a' } }, 'object={"a":"a"}', 'object');
 testBuildQuery({ value: null }, '', 'null');
 
 testBuildQuery({ value: undefined }, '', 'undefined');
+
+
