@@ -1,5 +1,6 @@
 import { Fetch, Params, FetchInit } from './index';
 
+
 export interface BaseResponse<T = null> {
 	code: string;
 	data: T;
@@ -10,7 +11,7 @@ const FetchInfo = {
 	id: 1,
 };
 
-function FetchWithResponse<T>(...argument: Parameters<typeof Fetch>) {
+export default function FetchWithResponse<T>(...argument: Parameters<typeof Fetch>) {
 	const [url, params, init = {}] = argument;
 	const fetchId = `${FetchInfo.id}_${+new Date()}`;
 
@@ -45,5 +46,3 @@ function FetchWithResponse<T>(...argument: Parameters<typeof Fetch>) {
 			}
 		});
 }
-
-export default FetchWithResponse;
