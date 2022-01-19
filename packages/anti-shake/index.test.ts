@@ -6,7 +6,7 @@ import useAntiShake from './index';
  * @param delay 防抖函数调用间隔单位ms
  * @param antiShakeDelay 防抖函数防抖间隔
  */
-const testAntiShake = (tobe: number, delay: number, antiShakeDelay = 300) => {
+const testAntiShake = (tobe: number, delay: number, antiShakeDelay = 30) => {
 	const antiShakedFunction = useAntiShake(
 		(id: number) => Promise.resolve(id),
 		{ delay: antiShakeDelay }
@@ -30,20 +30,20 @@ const testAntiShake = (tobe: number, delay: number, antiShakeDelay = 300) => {
 	});
 };
 
-/** 模拟输入间隔为 100ms,没超过防抖间隔300ms,需要防抖 */
-test('anti-shake', () => testAntiShake(10, 100));
+/** 模拟输入间隔为 10ms,没超过防抖间隔30ms,需要防抖 */
+test('anti-shake', () => testAntiShake(10, 10));
 
-/** 模拟输入间隔为 300ms,刚好等于防抖间隔300ms,不需要防抖 */
-test('anti-shake', () => testAntiShake(55, 300));
+/** 模拟输入间隔为 30ms,刚好等于防抖间隔30ms,不需要防抖 */
+test('anti-shake', () => testAntiShake(55, 30));
 
-/** 模拟输入间隔为 299ms,刚好小于防抖间隔300ms,需要防抖 */
-test('anti-shake', () => testAntiShake(10, 299));
+/** 模拟输入间隔为 29ms,刚好小于防抖间隔30ms,需要防抖 */
+test('anti-shake', () => testAntiShake(10, 29));
 
-/** 模拟输入间隔为 301ms,刚好大于防抖间隔300ms,不需要防抖 */
-test('anti-shake', () => testAntiShake(55, 301));
+/** 模拟输入间隔为 31ms,刚好大于防抖间隔30ms,不需要防抖 */
+test('anti-shake', () => testAntiShake(55, 31));
 
-/** 模拟输入间隔为 350ms,小于防抖间隔400ms,需要防抖 */
-test('anti-shake', () => testAntiShake(10, 350, 400));
+/** 模拟输入间隔为 35ms,小于防抖间隔40ms,需要防抖 */
+test('anti-shake', () => testAntiShake(10, 35, 40));
 
-/** 模拟输入间隔为 200ms,小于于防抖间隔199ms,不需要防抖 */
-test('anti-shake', () => testAntiShake(55, 200, 199));
+/** 模拟输入间隔为 20ms,小于于防抖间隔19ms,不需要防抖 */
+test('anti-shake', () => testAntiShake(55, 20, 19));
