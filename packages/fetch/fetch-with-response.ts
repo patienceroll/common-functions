@@ -1,6 +1,5 @@
 import { Fetch, Params, FetchInit } from './index';
 
-
 export interface BaseResponse<T = null> {
 	code: string;
 	data: T;
@@ -11,7 +10,9 @@ const FetchInfo = {
 	id: 1,
 };
 
-export default function FetchWithResponse<T>(...argument: Parameters<typeof Fetch>) {
+export default function FetchResponse<T>(
+	...argument: Parameters<typeof Fetch>
+) {
 	const [url, params, init = {}] = argument;
 	const fetchId = `${FetchInfo.id}_${+new Date()}`;
 
@@ -42,7 +43,11 @@ export default function FetchWithResponse<T>(...argument: Parameters<typeof Fetc
 		})
 		.catch((err) => {
 			if (typeof err === 'object' && !err.code) {
-				console.error('网络错误');
+				console.error('网络错误', JSON.stringify(err));
+			} else if (!(err.name && err.name === 'AbortError')) {
+				// 排除掉 abort 错误
+				console.log('用户取消请求');
 			}
+			return Promise.reject(err);
 		});
 }
