@@ -1,79 +1,88 @@
-import buildQuery from './build-query';
+import { Fetch, Params, FetchInit } from './fetch';
 
-export type Method =
-	| 'CONNECT'
-	| 'DELETE'
-	| 'GET'
-	| 'HEAD'
-	| 'OPTIONS'
-	| 'PATCH'
-	| 'POST'
-	| 'PUT'
-	| 'TRACE';
 
-export type FetchInit = Omit<RequestInit, 'method'> & {
-	method?: Method;
-	paramsSerializer?: (params: Record<string | number, unknown>) => string;
+const FetchInfo = {
+	id: 1,
 };
 
-export type Params = Record<string | number, unknown> | BodyInit;
-
-function isIntanceofBodyInit(data: unknown) {
-	return (
-		data instanceof ReadableStream ||
-		data instanceof Blob ||
-		data instanceof ArrayBuffer ||
-		data instanceof FormData ||
-		data instanceof URLSearchParams ||
-		typeof data === 'string'
-	);
+export interface BaseResponse<T = null> {
+	code: string;
+	data: T;
+	message: string;
 }
 
-function Fetch(url: string, params?: Params, init: FetchInit = {}) {
-	let query: string | undefined;
-	let body: RequestInit['body'];
-	const { method = 'GET', paramsSerializer } = init;
-
-	if (['GET', 'DELETE', 'HEAD'].includes(method)) {
-		if (params)
-			query = paramsSerializer
-				? paramsSerializer(params as Exclude<Params, BodyInit>)
-				: buildQuery(params as Exclude<Params, BodyInit>);
-	} else if (['POST', 'PUT', 'PATCH'].includes(method)) {
-		if (isIntanceofBodyInit(params)) body = params as BodyInit;
-		else body = JSON.stringify(params as Exclude<Params, BodyInit>);
-	}
-
-	return fetch(query ? `${url}?${query}` : url, { ...init, method, body });
+/**
+ * ### 发起get请求
+ * - 不管 init 里面的 method 传什么参数,都会发起 get 请求
+ */
+export function getResoponse<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'GET';
+	return FetchResponse<T>(url, params, init);
+}
+/**
+ * ### post
+ * - 不管 init 里面的 method 传什么参数,都会发起 post 请求
+ */
+export function postResoponse<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'POST';
+	return FetchResponse<T>(url, params, init);
 }
 
-function Get(
-	url: string,
-	params?: Exclude<Params, BodyInit>,
-	init?: FetchInit
+/**
+ * ### put
+ * - 不管 init 里面的 method 传什么参数,都会发起 put 请求
+ */
+export function putResoponse<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'PUT';
+	return FetchResponse<T>(url, params, init);
+}
+
+
+export default function FetchResponse<T>(
+	...argument: Parameters<typeof Fetch>
 ) {
-	const query = params ? buildQuery(params) : undefined;
-	return fetch(query ? `${url}?${query}` : url, init);
-}
+	const [url, params, init = {}] = argument;
+	const fetchId = `${FetchInfo.id}_${+new Date()}`;
 
-function Delete(
-	url: string,
-	params?: Exclude<Params, BodyInit>,
-	init?: FetchInit
-) {
-	return Fetch(url, params, { ...init, method: 'DELETE' });
-}
+	const mergeInit: FetchInit = {
+		...init,
+		headers: {
+			...(init.headers || {}),
+		},
+	};
 
-function Post(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'POST' });
-}
+	if (FetchInfo.id === Number.MAX_SAFE_INTEGER) FetchInfo.id = 1;
+	else FetchInfo.id += 1;
 
-function Put(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'PUT' });
-}
+	if (params instanceof FormData || params instanceof URLSearchParams)
+		params.append('_fetchId', fetchId);
+	else if (
+		typeof params === 'object' &&
+		params.toString() === '[object Object]'
+	)
+		(params as Exclude<Params, BodyInit>)['_fetchId'] = fetchId;
 
-function Patch(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'PATCH' });
+	return Fetch(url, params, mergeInit)
+		.then((res) => res.json())
+		.then((res: BaseResponse<T>) => {
+			if (res.code === '000000') return res;
+			return Promise.reject({
+				type: 'service-error',
+				data: res,
+			});
+		})
+		.catch((err) => {
+			if (typeof err === 'object' && err.type === 'service-error') {
+				console.error('后端响应错误', JSON.stringify(err));
+			} else if (err instanceof DOMException && err.name === 'AbortError') {
+				// 排除掉 abort 错误
+				console.log('用户取消请求');
+			} else {
+				// 接口请求错误
+			}
+			return Promise.reject(err);
+		});
 }
-
-export { Get, Patch, Put, Post, Delete, Fetch };
