@@ -38,15 +38,19 @@ export default function FetchResponse<T>(
 		.then((res) => res.json())
 		.then((res: BaseResponse<T>) => {
 			if (res.code === '000000') return res;
-			console.error(res.message);
-			return Promise.reject(res);
+			return Promise.reject({
+				type: 'service-error',
+				data: res,
+			});
 		})
 		.catch((err) => {
-			if (typeof err === 'object' && !err.code) {
-				console.error('网络错误', JSON.stringify(err));
-			} else if (!(err.name && err.name === 'AbortError')) {
+			if (typeof err === 'object' && err.type === 'service-error') {
+				console.error('后端响应错误', JSON.stringify(err));
+			} else if (err instanceof DOMException && err.name === 'AbortError') {
 				// 排除掉 abort 错误
 				console.log('用户取消请求');
+			} else {
+				// 接口请求错误
 			}
 			return Promise.reject(err);
 		});

@@ -2,7 +2,7 @@ import { Fetch } from './index';
 const FetchInfo = {
     id: 1,
 };
-function FetchWithResponse(...argument) {
+export default function FetchResponse(...argument) {
     const [url, params, init = {}] = argument;
     const fetchId = `${FetchInfo.id}_${+new Date()}`;
     const mergeInit = Object.assign(Object.assign({}, init), { headers: Object.assign({}, (init.headers || {})) });
@@ -25,8 +25,12 @@ function FetchWithResponse(...argument) {
     })
         .catch((err) => {
         if (typeof err === 'object' && !err.code) {
-            console.error('网络错误');
+            console.error('网络错误', JSON.stringify(err));
         }
+        else if (!(err.name && err.name === 'AbortError')) {
+            // 排除掉 abort 错误
+            console.log('用户取消请求');
+        }
+        return Promise.reject(err);
     });
 }
-export default FetchWithResponse;
