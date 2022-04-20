@@ -54,6 +54,11 @@ export default function FetchResponse<T>(
 		},
 	};
 
+	/** 当请求传递的是 FormData 的时候,删除 Content-Type  */
+	// if (params instanceof FormData && mergeInit.headers && mergeInit.headers['Content-Type']) {
+	// 	delete mergeInit.headers['Content-Type'];
+	// }
+
 	if (FetchInfo.id === Number.MAX_SAFE_INTEGER) FetchInfo.id = 1;
 	else FetchInfo.id += 1;
 
