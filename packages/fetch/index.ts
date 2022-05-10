@@ -1,5 +1,5 @@
-import { Fetch, Params, FetchInit } from './fetch';
-
+import Fetch from './fetch';
+import { Params, FetchInit } from './fetch';
 
 const FetchInfo = {
 	id: 1,
@@ -40,7 +40,6 @@ export function putResoponse<T>(...argument: Parameters<typeof Fetch>) {
 	return FetchResponse<T>(url, params, init);
 }
 
-
 export default function FetchResponse<T>(
 	...argument: Parameters<typeof Fetch>
 ) {
@@ -71,7 +70,10 @@ export default function FetchResponse<T>(
 		(params as Exclude<Params, BodyInit>)['_fetchId'] = fetchId;
 
 	return Fetch(url, params, mergeInit)
-		.then((res) => res.json())
+		.then((res) => {
+			if (res.ok) return res.json();
+			return Promise.reject(res);
+		})
 		.then((res: BaseResponse<T>) => {
 			if (res.code === '000000') return res;
 			return Promise.reject({

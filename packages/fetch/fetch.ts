@@ -29,7 +29,11 @@ function isIntanceofBodyInit(data: unknown) {
 	);
 }
 
-function Fetch(url: string, params?: Params, init: FetchInit = {}) {
+export default function Fetch(
+	url: string,
+	params?: Params,
+	init: FetchInit = {}
+) {
 	let query: string | undefined;
 	let body: RequestInit['body'];
 	const { method = 'GET', paramsSerializer } = init;
@@ -46,34 +50,3 @@ function Fetch(url: string, params?: Params, init: FetchInit = {}) {
 
 	return fetch(query ? `${url}?${query}` : url, { ...init, method, body });
 }
-
-function Get(
-	url: string,
-	params?: Exclude<Params, BodyInit>,
-	init?: FetchInit
-) {
-	const query = params ? buildQuery(params) : undefined;
-	return fetch(query ? `${url}?${query}` : url, init);
-}
-
-function Delete(
-	url: string,
-	params?: Exclude<Params, BodyInit>,
-	init?: FetchInit
-) {
-	return Fetch(url, params, { ...init, method: 'DELETE' });
-}
-
-function Post(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'POST' });
-}
-
-function Put(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'PUT' });
-}
-
-function Patch(url: string, params?: Params, init?: FetchInit) {
-	return Fetch(url, params, { ...init, method: 'PATCH' });
-}
-
-export { Get, Patch, Put, Post, Delete, Fetch };

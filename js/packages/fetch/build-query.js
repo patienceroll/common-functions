@@ -1,12 +1,3 @@
-// function encode(val: string) {
-// 	return encodeURIComponent(val)
-// 		.replace(/%3A/gi, ':')
-// 		.replace(/%24/g, '$')
-// 		.replace(/%2C/gi, ',')
-// 		.replace(/%20/g, '+')
-// 		.replace(/%5B/gi, '[')
-// 		.replace(/%5D/gi, ']');
-// }
 /**
  * ### 构建url的query参数
  * 1. date 对象会转为 .toISOString()
