@@ -30,13 +30,13 @@ export default function useCount(
 
 	function doCount() {
 		Timer = setTimeout(() => {
-			if (defaultCount > end) {
+			if (store > end) {
 				const next = Count.value - step;
 				if (next > end) {
 					Count.value = next;
 					doCount();
 				} else Count.value = end;
-			} else if (defaultCount < end) {
+			} else if (store < end) {
 				const next = Count.value + step;
 				if (next < end) {
 					Count.value = next;
@@ -60,5 +60,10 @@ export default function useCount(
 		doCount();
 	}
 
-	return { count: Count, start, stop, goOn };
+	function goWith(count: number) {
+		store = count;
+		doCount();
+	}
+
+	return { count: Count, start, stop, goOn, goWith };
 }

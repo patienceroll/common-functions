@@ -18,7 +18,7 @@ export default function useCount(defaultCount, options = {}) {
     };
     function doCount() {
         Timer = setTimeout(() => {
-            if (defaultCount > end) {
+            if (store > end) {
                 const next = Count.value - step;
                 if (next > end) {
                     Count.value = next;
@@ -27,7 +27,7 @@ export default function useCount(defaultCount, options = {}) {
                 else
                     Count.value = end;
             }
-            else if (defaultCount < end) {
+            else if (store < end) {
                 const next = Count.value + step;
                 if (next < end) {
                     Count.value = next;
@@ -50,5 +50,9 @@ export default function useCount(defaultCount, options = {}) {
     function goOn() {
         doCount();
     }
-    return { count: Count, start, stop, goOn };
+    function goWith(count) {
+        store = count;
+        doCount();
+    }
+    return { count: Count, start, stop, goOn, goWith };
 }
