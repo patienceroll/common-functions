@@ -4,4 +4,5 @@ import FetchWithResponse from './fetch';
 import useBrowserEnv from './use-brower-env/index';
 import useCount from './use-count/index';
 import useInterval from './use-interval/index';
-export { useAntiShake, Fetch, FetchWithResponse, useBrowserEnv, useCount, useInterval, };
+import useValve from './use-valve';
+export { useAntiShake, Fetch, FetchWithResponse, useBrowserEnv, useCount, useInterval, useValve };
