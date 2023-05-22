@@ -1,5 +1,4 @@
-import Fetch from './fetch';
-import { Params, FetchInit } from './fetch';
+import Fetch, { FetchInit, Params } from './fetch';
 
 const FetchInfo = {
 	id: 1,
@@ -11,38 +10,7 @@ export interface BaseResponse<T = null> {
 	message: string;
 }
 
-/**
- * ### 发起get请求
- * - 不管 init 里面的 method 传什么参数,都会发起 get 请求
- */
-export function getResoponse<T>(...argument: Parameters<typeof Fetch>) {
-	const [url, params = {}, init = {}] = argument;
-	init.method = 'GET';
-	return FetchResponse<T>(url, params, init);
-}
-/**
- * ### post
- * - 不管 init 里面的 method 传什么参数,都会发起 post 请求
- */
-export function postResoponse<T>(...argument: Parameters<typeof Fetch>) {
-	const [url, params = {}, init = {}] = argument;
-	init.method = 'POST';
-	return FetchResponse<T>(url, params, init);
-}
-
-/**
- * ### put
- * - 不管 init 里面的 method 传什么参数,都会发起 put 请求
- */
-export function putResoponse<T>(...argument: Parameters<typeof Fetch>) {
-	const [url, params = {}, init = {}] = argument;
-	init.method = 'PUT';
-	return FetchResponse<T>(url, params, init);
-}
-
-export default function FetchResponse<T>(
-	...argument: Parameters<typeof Fetch>
-) {
+function fetchResponse<T>(...argument: Parameters<typeof Fetch>) {
 	const [url, params, init = {}] = argument;
 	const fetchId = `${FetchInfo.id}_${+new Date()}`;
 
@@ -93,3 +61,31 @@ export default function FetchResponse<T>(
 			return Promise.reject(err);
 		});
 }
+
+/**
+ * ### 发起get请求
+ */
+export function get<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'GET';
+	return fetchResponse<T>(url, params, init);
+}
+/**
+ * ### post
+ */
+export function post<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'POST';
+	return fetchResponse<T>(url, params, init);
+}
+
+/**
+ * ### put
+ */
+export function put<T>(...argument: Parameters<typeof Fetch>) {
+	const [url, params = {}, init = {}] = argument;
+	init.method = 'PUT';
+	return fetchResponse<T>(url, params, init);
+}
+
+export default { fetchResponse, get, post, put };
